@@ -1,5 +1,4 @@
-import requests
-from lxml import etree
+
 
 class ReunionParser():
 
@@ -8,6 +7,7 @@ class ReunionParser():
         self.list = []
 
     def parse(self):
+        '''
         print(f'==> parse page: {self.url}')
         resp = requests.get(self.url)
         content = resp.text
@@ -16,3 +16,4 @@ class ReunionParser():
 
         entries = tree.xpath("//*[contains(@id, 'ItemList')]//*[contains(@id, 'Item_')]//*[contains(@class, 'text')]//*[contains(@href, '/follow/channel/stock-')]")
         print(entries)
+        '''
