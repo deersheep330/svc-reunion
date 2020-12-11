@@ -5,11 +5,14 @@ class ReunionParser():
 
     def __init__(self):
         self.url = 'https://www.cmoney.tw/follow/channel/hot-stock'
-        self.dict = {}
+        self.list = []
 
     def parse(self):
-        pass
+        print(f'==> parse page: {self.url}')
+        resp = requests.get(self.url)
+        content = resp.text
+        tree = etree.HTML(content)
+        print(content)
 
-    def get_popularities(self):
-        return self.dict
-
+        entries = tree.xpath("//*[contains(@id, 'ItemList')]//*[contains(@id, 'Item_')]//*[contains(@class, 'text')]//*[contains(@href, '/follow/channel/stock-')]")
+        print(entries)
