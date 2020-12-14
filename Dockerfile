@@ -1,4 +1,4 @@
-FROM python:3.8.6-slim-buster
+FROM deersheep330/python-chrome
 
 # Add crontab file in the cron directory
 ADD crontab /etc/cron.d/hello-cron
@@ -22,7 +22,7 @@ COPY requirements.txt .
 RUN pip install -r requirements.txt
 
 # Run the command on container startup
-CMD python main.py && cron && tail -f /var/log/cron.log
+CMD cron && tail -f /var/log/cron.log
 # CMD ["cron", "-f"]
 
 #Quick note about a gotcha:

@@ -16,6 +16,7 @@ class ReunionParser():
         print(f'==> parse page: {self.url}')
         options = webdriver.ChromeOptions()
         options.add_argument('--headless')
+        options.add_argument('--no-sandbox')
 
         driver = webdriver.Chrome(executable_path=ChromeDriverManager().install(), options=options)
 
