@@ -1,5 +1,5 @@
 from ..db import create_engine, start_session, insert, get_db_hostname
-from ..models.reunion_trend import ReunionTrend
+from ..models import ReunionTrend
 from ..parser import ReunionParser
 
 class ReunionTrends():
