@@ -8,8 +8,6 @@ RUN chmod 0644 /etc/cron.d/hello-cron
 
 WORKDIR /home/app
 
-#COPY stocksymbols ./stocksymbols
-#COPY cron.py .
 COPY requirements.txt .
 
 RUN pip install -r requirements.txt
