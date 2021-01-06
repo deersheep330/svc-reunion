@@ -1,10 +1,17 @@
-from ..db import create_engine, start_session, insert, get_db_hostname
-from ..models import ReunionTrend
-from ..parser import ReunionParser
+import grpc
+
+from reunion.parser import ReunionParser
+from reunion.utils import get_grpc_hostname
+from api.protos import database_pb2_grpc
+from api.protos.database_pb2 import TrendWithDefaultDate
 
 class ReunionTrends():
 
     def __init__(self):
+
+        channel = grpc.insecure_channel(f'{get_grpc_hostname()}:6565')
+        self.stub = database_pb2_grpc.DatabaseStub(channel)
+
         self.parser = ReunionParser()
         self.parser.parse()
 
@@ -18,8 +25,6 @@ class ReunionTrends():
         return self.dict
 
     def save_to_db(self):
-        engine = create_engine('mysql+pymysql', 'root', 'admin', get_db_hostname(), '3306', 'mydb')
-        session = start_session(engine)
 
         for key, value in self.dict.items():
             _dict = {
@@ -27,8 +32,10 @@ class ReunionTrends():
                'popularity': value
             }
             try:
-                insert(session, ReunionTrend, _dict)
-            except Exception as e:
-                print(f'insert entry error: {e}')
-        session.commit()
-        session.close()
+                rowcount = self.stub.insert_reunion_trend(
+                    TrendWithDefaultDate(symbol=_dict['symbol'], popularity=_dict['popularity']))
+                print(rowcount)
+            except grpc.RpcError as e:
+                status_code = e.code()
+                print(e.details())
+                print(status_code.name, status_code.value)
